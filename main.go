@@ -5,15 +5,28 @@ import (
 	"net/http"
 )
 
-var PORT = "3000"
-
 func main() {
-	http.HandleFunc("/", homeHandler)
 
-	fmt.Println("Listening to server on http://localhost:3000")
-	http.ListenAndServe("localhost:"+PORT, nil)
+	Home := page{
+		header: "<h1>Home page</h1>",
+	}
+	About := page{
+		header: "<h1>About</h1>",
+	}
+	http.Handle("/", Home)
+	http.Handle("/about", About)
+	http.ListenAndServe("localhost:8080", nil)
+
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Welcome to go server")
+type page struct {
+	header string
+}
+
+func (page page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	print(page, w)
+}
+
+func print(page page, w http.ResponseWriter) {
+	fmt.Fprint(w, page.header)
 }
