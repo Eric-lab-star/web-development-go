@@ -1,32 +1,47 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Get("/", home)
+	r.Get("/user/{userId}", profile)
+	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		notFound(w)
+	})
+	apiRouter := chi.NewRouter()
+	apiRouter.Get("/books", getBooks)
+	r.Mount("/api", apiRouter)
 
-	Home := page{
-		header: "<h1>Home page</h1>",
-	}
-	About := page{
-		header: "<h1>About</h1>",
-	}
-	http.Handle("/", Home)
-	http.Handle("/about", About)
-	http.ListenAndServe("localhost:8080", nil)
-
+	http.ListenAndServe("localhost:8080", r)
 }
 
-type page struct {
-	header string
+func getBooks(w http.ResponseWriter, r *http.Request) {
+	render(w, "books")
 }
 
-func (page page) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	print(page, w)
+func profile(w http.ResponseWriter, r *http.Request) {
+	userId := chi.URLParam(r, "userId")
+	render(w, "userId: "+userId)
 }
 
-func print(page page, w http.ResponseWriter) {
-	fmt.Fprint(w, page.header)
+func home(w http.ResponseWriter, r *http.Request) {
+	render(w, "home")
+}
+
+func render(w http.ResponseWriter, v string) {
+	w.Header().Set("Content-Type", "text/html; charset=utf8")
+	w.Write([]byte(v))
+}
+func notFound(w http.ResponseWriter) {
+	w.WriteHeader(http.StatusNotFound)
+	w.Header().Set("Content-Type", "text/html; charset=utf8")
+	w.Write([]byte("<h1>Page Not Found</h1>"))
+
 }
