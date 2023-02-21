@@ -1,3 +1,5 @@
 notes/
 tmp/
 /.air.toml
+
+go.work
