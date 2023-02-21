@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { About } from "./About";
+import ErrorPage from "./Error-page";
 
-import App from "./App";
-import FAQ from "./FAQ";
+import "./Global.css";
+import Root from "./routes/Root";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,15 +13,9 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-  },
-  {
-    path: "/about",
-    element: <About />,
-  },
-  {
-    path: "/faq",
-    element: <FAQ />,
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [],
   },
 ]);
 
