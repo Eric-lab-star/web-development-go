@@ -1,1 +1,10 @@
 <h1>hello {{.Name}} </h1>
+<p>bio {{.Bio}} </p>
+
+<script>
+const user = {
+    "name": {{.Name}},
+    "bio": {{.Bio}}
+};
+console.log(user.bio);
+</script>

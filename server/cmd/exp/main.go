@@ -1,8 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
-	"os"
+	"net/http"
 )
 
 func main() {
@@ -11,8 +12,21 @@ func main() {
 		panic(err)
 	}
 
-	data := struct{ Name string }{
+	data := struct {
+		Name string
+		Bio  string
+	}{
 		Name: "Kim Kyungsub",
+		Bio:  `<script>alert("hello world");</script>`,
 	}
-	t.Execute(os.Stdout, data)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
+		err = t.Execute(w, data)
+		if err != nil {
+			panic(err)
+		}
+	})
+	fmt.Println("listening to server")
+	http.ListenAndServe("localhost:8080", nil)
+
 }
