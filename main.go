@@ -38,7 +38,6 @@ func faq(w http.ResponseWriter, r *http.Request) {
 }
 
 func render(w http.ResponseWriter, file string) {
-
 	w.Header().Set("Content-Type", "text/html; charset=utf8")
 	tpl, err := template.ParseFiles(file)
 	if err != nil {
@@ -47,9 +46,9 @@ func render(w http.ResponseWriter, file string) {
 	}
 	tpl.Execute(w, nil)
 }
+
 func notFound(w http.ResponseWriter) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "text/html; charset=utf8")
 	w.Write([]byte("<h1>Page Not Found</h1>"))
-
 }
