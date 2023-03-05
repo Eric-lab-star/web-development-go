@@ -27,5 +27,4 @@ func (t Template) Execute(w http.ResponseWriter, data interface{}) {
 		http.Error(w, "There was an error executing the template.", http.StatusInternalServerError)
 		return
 	}
-
 }
